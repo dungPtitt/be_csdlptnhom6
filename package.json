@@ -1,0 +1,30 @@
+{
+  "name": "becsdlpt6nhom6",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.4",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "msnodesqlv8": "^2.7.0",
+    "mssql": "^9.1.1",
+    "nodemon": "^2.0.22",
+    "tedious": "^16.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.21.8",
+    "@babel/node": "^7.20.7",
+    "@babel/preset-env": "^7.21.5",
+    "sequelize-cli": "^6.6.0"
+  }
+}
