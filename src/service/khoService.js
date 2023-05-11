@@ -1,7 +1,7 @@
 import {connect, sql} from "../util/connectDB";
 import {configDB} from "../util/configDB";
 
-let handleCreateNhanVien = (data)=>{
+let handleCreateKho = (data)=>{
   return new Promise(async(resolve, reject)=>{
     try{
       if(!data.HOTEN || !data.SDT){
@@ -14,7 +14,7 @@ let handleCreateNhanVien = (data)=>{
       let  pool = await  sql.connect(configDB);
       let res = await  pool.request()
       .input('input_parameter', data.MANV)
-      .query("SELECT * from NHANVIEN where MANV = @input_parameter");
+      .query("SELECT * from KHO where MANV = @input_parameter");
       if(res.recordset.length!==0){
         return resolve({
           errCode: 2,
@@ -39,7 +39,7 @@ let handleCreateNhanVien = (data)=>{
       .input('DIACHI', data.DIACHI)
       .input('CHUCVU', data.CHUCVU)
       .input('LUONG', data.LUONG)
-      .execute('sp_create_nhanvien');
+      .execute('sp_create_kho');
       return resolve({
         errCode: 0,
         message: "Create nhan vien successfully!",
@@ -51,19 +51,19 @@ let handleCreateNhanVien = (data)=>{
   })
 }
 
-let handleGetNhanVien = (idNhanVien)=>{
+let handleGetKho = (idKho)=>{
   return new Promise(async(resolve, reject)=>{
     try{
       let data="";
-      if(!idNhanVien) {
+      if(!idKho) {
         let  pool = await  sql.connect(configDB);
-        data = await  pool.request().query("SELECT * from NHANVIEN");
+        data = await  pool.request().query("SELECT * from KHO");
       }else {
         let  pool = await  sql.connect(configDB);
-        console.log(idNhanVien);
+        console.log(idKho);
         data = await  pool.request()
-        .input('input_parameter', idNhanVien)
-        .query("SELECT * from NHANVIEN where MANV = @input_parameter");
+        .input('input_parameter', idKho)
+        .query("SELECT * from KHO where MAKHO = @input_parameter");
       }
       // console.log(data);
       return resolve({
@@ -79,7 +79,7 @@ let handleGetNhanVien = (idNhanVien)=>{
   })
 }
 
-let handleUpdateNhanVien = (data)=>{
+let handleUpdateKho = (data)=>{
   return new Promise(async(resolve, reject)=>{
     try{
       if(!data.HOTEN || !data.SDT || !data.MANV ||!data.CHUCVU || !data.DIACHI ||!data.LUONG){
@@ -96,7 +96,7 @@ let handleUpdateNhanVien = (data)=>{
       .input('DIACHI', data.DIACHI)
       .input('CHUCVU', data.CHUCVU)
       .input('LUONG', data.LUONG)
-      .execute('sp_update_nhanvien');
+      .execute('sp_update_kho');
       return resolve({
         errCode: 0,
         message: "Update successfully!",
@@ -108,10 +108,10 @@ let handleUpdateNhanVien = (data)=>{
   })
 }
 
-let handleDeleteNhanVien = (idNhanVien)=>{
+let handleDeleteKho = (idKho)=>{
   return new Promise(async(resolve, reject)=>{
     try{
-      if(!idNhanVien){
+      if(!idKho){
         return resolve({
           errCode: 1,
           errMessage: "Missing input data",
@@ -120,8 +120,8 @@ let handleDeleteNhanVien = (idNhanVien)=>{
       
       let  pool = await  sql.connect(configDB);
       let data = await  pool.request()
-      .input('input_parameter', idNhanVien)
-      .query("DELETE FROM NHANVIEN where MANV = @input_parameter");
+      .input('input_parameter', idKho)
+      .query("DELETE FROM KHO where MANV = @input_parameter");
       // DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
       // console.log(data);
       return resolve({
@@ -136,8 +136,8 @@ let handleDeleteNhanVien = (idNhanVien)=>{
 
 
 module.exports = {
-  handleGetNhanVien,
-  handleUpdateNhanVien,
-  handleCreateNhanVien,
-  handleDeleteNhanVien
+  handleGetKho,
+  handleUpdateKho,
+  handleCreateKho,
+  handleDeleteKho
 }

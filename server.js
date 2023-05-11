@@ -21,17 +21,14 @@ app.use(express.urlencoded({ extended: true }));
 
 configViewEngine(app);
 
-console.log(connect);
 connect
   .then((pool)=>{
-    // console.log(pool);
     pool.request().query("SELECT * FROM CHINHANH", (err, data)=>{
       if(err){
         console.log("err------------->", err);
         return;
       }
       console.log("Connection has been established successfully.")
-      // console.log("data--------->", data);
     })
   })
   .catch();
