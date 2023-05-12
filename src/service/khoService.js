@@ -4,7 +4,7 @@ import {configDB} from "../util/configDB";
 let handleCreateKho = (data)=>{
   return new Promise(async(resolve, reject)=>{
     try{
-      if(!data.HOTEN || !data.SDT){
+      if(!data.TENKHO || !data.DIACHI){
         return resolve({
           errCode: 1,
           errMessage: "Missing input data",
@@ -13,36 +13,33 @@ let handleCreateKho = (data)=>{
 
       let  pool = await  sql.connect(configDB);
       let res = await  pool.request()
-      .input('input_parameter', data.MANV)
-      .query("SELECT * from KHO where MANV = @input_parameter");
+      .input('input_parameter', data.MAKHO)
+      .query("SELECT * from KHO where MAKHO = @input_parameter");
       if(res.recordset.length!==0){
         return resolve({
           errCode: 2,
-          errMessage: "Ma nhan vien da ton tai trong db!",
+          errMessage: "Ma kho da ton tai trong db!",
         })
       }
-      if(!data.MACN) {
+      if(data.MACN!="CN01") {
         data.MACN = "CN01"
       }
-      if(!data.MANV.includes("NV01", 0)){
+      if(!data.MAKHO.includes("K01", 0)){
         return resolve({
           errCode: 2,
-          errMessage: "Ma nhan vien phai co dang NV01!",
+          errMessage: "Ma kho phai co dang K01!",
         })
       }
       // pool = await  sql.connect(configDB);
       res = await  pool.request()
-      .input('MANV', data.MANV)
-      .input('HOTEN', data.HOTEN)
-      .input('SDT', data.SDT)
+      .input('MAKHO', data.MAKHO)
       .input('MACN', data.MACN)
+      .input('TENKHO', data.TENKHO)
       .input('DIACHI', data.DIACHI)
-      .input('CHUCVU', data.CHUCVU)
-      .input('LUONG', data.LUONG)
       .execute('sp_create_kho');
       return resolve({
         errCode: 0,
-        message: "Create nhan vien successfully!",
+        message: "Create kho successfully!",
         data: res.recordset
       })
     }catch(e){
@@ -60,15 +57,13 @@ let handleGetKho = (idKho)=>{
         data = await  pool.request().query("SELECT * from KHO");
       }else {
         let  pool = await  sql.connect(configDB);
-        console.log(idKho);
         data = await  pool.request()
         .input('input_parameter', idKho)
         .query("SELECT * from KHO where MAKHO = @input_parameter");
       }
-      // console.log(data);
       return resolve({
         errCode: 0,
-        message: "Get all Pet successfully!",
+        message: "Get all kho successfully!",
         data: data.recordset
       })
 
@@ -82,7 +77,7 @@ let handleGetKho = (idKho)=>{
 let handleUpdateKho = (data)=>{
   return new Promise(async(resolve, reject)=>{
     try{
-      if(!data.HOTEN || !data.SDT || !data.MANV ||!data.CHUCVU || !data.DIACHI ||!data.LUONG){
+      if(!data.MAKHO || !data.TENKHO || !data.DIACHI){
         return resolve({
           errCode: 1,
           errMessage: "Missing input data",
@@ -90,12 +85,9 @@ let handleUpdateKho = (data)=>{
       }
       let  pool = await  sql.connect(configDB);
       let  res = await  pool.request()
-      .input('MANV', data.MANV)
-      .input('HOTEN', data.HOTEN)
-      .input('SDT', data.SDT)
+      .input('MAKHO', data.MAKHO)
+      .input('TENKHO', data.TENKHO)
       .input('DIACHI', data.DIACHI)
-      .input('CHUCVU', data.CHUCVU)
-      .input('LUONG', data.LUONG)
       .execute('sp_update_kho');
       return resolve({
         errCode: 0,
@@ -121,9 +113,7 @@ let handleDeleteKho = (idKho)=>{
       let  pool = await  sql.connect(configDB);
       let data = await  pool.request()
       .input('input_parameter', idKho)
-      .query("DELETE FROM KHO where MANV = @input_parameter");
-      // DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
-      // console.log(data);
+      .query("DELETE FROM KHO where MAKHO = @input_parameter");
       return resolve({
         errCode: 0,
         message: "Delete employee successfully!",

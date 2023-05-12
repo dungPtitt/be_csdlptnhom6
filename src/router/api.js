@@ -12,6 +12,9 @@ const initApiRoute = (app)=> {
   router.delete("/delete-nhanvien", apiController.deleteNhanVien);
 
   router.get("/get-kho", khoController.getKho);
+  router.post("/create-kho", khoController.createKho);
+  router.put("/update-kho", khoController.updateKho);
+  router.delete("/delete-kho", khoController.deleteKho);
   return app.use("/api/v1/", router);
 }
 

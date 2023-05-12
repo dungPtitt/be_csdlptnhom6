@@ -4,7 +4,6 @@ let getDaiLy = async(req, res)=>{
   try{
     let idDayLy = req.query.idDaiLy;
     let response = await daiLyService.handleGetDaiLy(idDayLy);
-    // console.log(response);
     return res.status(200).json(response);
   }catch(e){
     console.log(e);

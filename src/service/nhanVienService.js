@@ -60,12 +60,10 @@ let handleGetNhanVien = (idNhanVien)=>{
         data = await  pool.request().query("SELECT * from NHANVIEN");
       }else {
         let  pool = await  sql.connect(configDB);
-        console.log(idNhanVien);
         data = await  pool.request()
         .input('input_parameter', idNhanVien)
         .query("SELECT * from NHANVIEN where MANV = @input_parameter");
       }
-      // console.log(data);
       return resolve({
         errCode: 0,
         message: "Get all Pet successfully!",
@@ -122,8 +120,6 @@ let handleDeleteNhanVien = (idNhanVien)=>{
       let data = await  pool.request()
       .input('input_parameter', idNhanVien)
       .query("DELETE FROM NHANVIEN where MANV = @input_parameter");
-      // DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
-      // console.log(data);
       return resolve({
         errCode: 0,
         message: "Delete employee successfully!",
