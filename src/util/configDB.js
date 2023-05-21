@@ -3,6 +3,6 @@ export let configDB = {
   port: 1433,
   user: "sa",
   password: "123456",
-  database: "CN01",
+  database: "QLBH_CN06",
   driver: "msnodesqlv8",
 }

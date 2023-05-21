@@ -21,13 +21,11 @@ let handleCreateKho = (data)=>{
           errMessage: "Ma kho da ton tai trong db!",
         })
       }
-      if(data.MACN!="CN01") {
-        data.MACN = "CN01"
-      }
-      if(!data.MAKHO.includes("K01", 0)){
+      data.MACN = "CN06"
+      if(!data.MAKHO.includes("K06", 0)){
         return resolve({
           errCode: 2,
-          errMessage: "Ma kho phai co dang K01!",
+          errMessage: "Ma kho phai co dang K06!",
         })
       }
       // pool = await  sql.connect(configDB);

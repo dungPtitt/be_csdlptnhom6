@@ -1,46 +1,47 @@
 import {connect, sql} from "../util/connectDB";
 import {configDB} from "../util/configDB";
 
-let handleCreateNhanVien = (data)=>{
+let handleCreateHoaDon = (data)=>{
   return new Promise(async(resolve, reject)=>{
     try{
-      if(!data.HOTEN || !data.SDT){
+      console.log("check data", data);
+      if(!data.MAHD || !data.MAKHO || !data.MANV || !data.TENKH || !data.DIACHI ||!data.SDT||!data.NGAY ||!data.TONGTIEN){
         return resolve({
           errCode: 1,
           errMessage: "Missing input data",
         })
       }
-      console.log(data);
+
       let  pool = await  sql.connect(configDB);
       let res = await  pool.request()
-      .input('input_parameter', data.MANV)
-      .query("SELECT * from NHANVIEN where MANV = @input_parameter");
+      .input('input_parameter', data.MAHD)
+      .query("SELECT * from HOADON where MAHD = @input_parameter");
       if(res.recordset.length!==0){
         return resolve({
           errCode: 2,
-          errMessage: "Ma nhan vien da ton tai trong db!",
+          errMessage: "Ma hoa don da ton tai trong db!",
         })
       }
-      data.MACN = "CN06"
-      if(!data.MANV.includes("NV06", 0)){
+      if(!data.MAHD.includes("HD", 0)){
         return resolve({
           errCode: 2,
-          errMessage: "Ma nhan vien phai co dang NV06!",
+          errMessage: "Ma hoa don phai co dang HD!",
         })
       }
       // pool = await  sql.connect(configDB);
       res = await  pool.request()
+      .input('MAHD', data.MAHD)
+      .input('MAKHO', data.MAKHO)
       .input('MANV', data.MANV)
-      .input('HOTEN', data.HOTEN)
-      .input('SDT', data.SDT)
-      .input('MACN', data.MACN)
+      .input('TENKH', data.TENKH)
       .input('DIACHI', data.DIACHI)
-      .input('CHUCVU', data.CHUCVU)
-      .input('LUONG', data.LUONG)
-      .execute('sp_create_nhanvien');
+      .input('SDT', data.SDT)
+      .input('NGAY', data.NGAY)
+      .input('TONGTIEN', data.TONGTIEN)
+      .execute('sp_create_hoadon');
       return resolve({
         errCode: 0,
-        message: "Create nhan vien successfully!",
+        message: "Create hoadon successfully!",
         data: res.recordset
       })
     }catch(e){
@@ -49,22 +50,22 @@ let handleCreateNhanVien = (data)=>{
   })
 }
 
-let handleGetNhanVien = (idNhanVien)=>{
+let handleGetHoaDon = (idHoaDon)=>{
   return new Promise(async(resolve, reject)=>{
     try{
       let data="";
-      if(!idNhanVien) {
+      if(!idHoaDon) {
         let  pool = await  sql.connect(configDB);
-        data = await  pool.request().query("SELECT * from NHANVIEN");
+        data = await  pool.request().query("SELECT * from HOADON");
       }else {
         let  pool = await  sql.connect(configDB);
         data = await  pool.request()
-        .input('input_parameter', idNhanVien)
-        .query("SELECT * from NHANVIEN where MANV = @input_parameter");
+        .input('input_parameter', idHoaDon)
+        .query("SELECT * from HOADON where MAHD = @input_parameter");
       }
       return resolve({
         errCode: 0,
-        message: "Get all Pet successfully!",
+        message: "Get all kho successfully!",
         data: data.recordset
       })
 
@@ -75,10 +76,10 @@ let handleGetNhanVien = (idNhanVien)=>{
   })
 }
 
-let handleUpdateNhanVien = (data)=>{
+let handleUpdateHoaDon = (data)=>{
   return new Promise(async(resolve, reject)=>{
     try{
-      if(!data.HOTEN || !data.SDT || !data.MANV ||!data.CHUCVU || !data.DIACHI ||!data.LUONG){
+      if(!data.MAKHO || !data.TENKHO || !data.DIACHI){
         return resolve({
           errCode: 1,
           errMessage: "Missing input data",
@@ -86,13 +87,15 @@ let handleUpdateNhanVien = (data)=>{
       }
       let  pool = await  sql.connect(configDB);
       let  res = await  pool.request()
+      .input('MAHD', data.MAHD)
+      .input('MAKHO', data.MAKHO)
       .input('MANV', data.MANV)
-      .input('HOTEN', data.HOTEN)
-      .input('SDT', data.SDT)
+      .input('TENKH', data.TENKH)
       .input('DIACHI', data.DIACHI)
-      .input('CHUCVU', data.CHUCVU)
-      .input('LUONG', data.LUONG)
-      .execute('sp_update_nhanvien');
+      .input('SDT', data.SDT)
+      .input('NGAY', data.NGAY)
+      .input('TONGTIEN', data.TONGTIEN)
+      .execute('sp_update_hoadon');
       return resolve({
         errCode: 0,
         message: "Update successfully!",
@@ -104,10 +107,10 @@ let handleUpdateNhanVien = (data)=>{
   })
 }
 
-let handleDeleteNhanVien = (idNhanVien)=>{
+let handleDeleteHoaDon = (idHoaDon)=>{
   return new Promise(async(resolve, reject)=>{
     try{
-      if(!idNhanVien){
+      if(!idHoaDon){
         return resolve({
           errCode: 1,
           errMessage: "Missing input data",
@@ -116,11 +119,11 @@ let handleDeleteNhanVien = (idNhanVien)=>{
       
       let  pool = await  sql.connect(configDB);
       let data = await  pool.request()
-      .input('input_parameter', idNhanVien)
-      .query("DELETE FROM NHANVIEN where MANV = @input_parameter");
+      .input('input_parameter', idHoaDon)
+      .query("DELETE FROM HOADON where MAHD = @input_parameter");
       return resolve({
         errCode: 0,
-        message: "Delete employee successfully!",
+        message: "Delete hoa don successfully!",
       })
     }catch(e){
       reject(e);
@@ -130,8 +133,8 @@ let handleDeleteNhanVien = (idNhanVien)=>{
 
 
 module.exports = {
-  handleGetNhanVien,
-  handleUpdateNhanVien,
-  handleCreateNhanVien,
-  handleDeleteNhanVien
+  handleGetHoaDon,
+  handleUpdateHoaDon,
+  handleCreateHoaDon,
+  handleDeleteHoaDon
 }
